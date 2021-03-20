@@ -9,9 +9,10 @@
 	          decoration-danger="late_return==True"
 	          decoration-bf  = "(current_date == return_date)"
 	          default_order="return_date">
-	        <field name="id"/>
+	        <field name="id" string="Rental Ref #"/>
                 <field name="customer_id"/>
                 <field name="book_id"/>
+                <field name="copy_id" string="Copy #"/>
                 <field name="rental_date"/>
                 <field name="return_date"/>
                 <field name="book_author_names"/>
@@ -33,7 +34,7 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="id"/>
+                            <field name="id" string="Rental Ref #"/>
                         </group>
                         <group>
                             <field name="customer_id"/>
@@ -45,6 +46,7 @@
                     <group>
                         <group>
                             <field name="book_id"/>
+                            <field name="copy_id"/>
                             <field name="book_publisher"/>
                             <field name="book_edition_date"/>
                             <field name="book_author_names"/> 

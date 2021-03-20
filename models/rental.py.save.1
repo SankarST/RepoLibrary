@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+from datetime import timedelta
+from odoo import fields, models,api
+
+
+class Rentals(models.Model):
+    _name = 'library.rental'
+    _description = 'Book rental'
+
+
+    customer_id = fields.Many2one('library.partner', string='Customer')
+    book_id = fields.Many2one('library.book', string='Book')
+
+    rental_date = fields.Date()
+    return_date = fields.Date(required=True)
+
+    customer_address = fields.Text(related='customer_id.address')
+    customer_email = fields.Char(related='customer_id.email')
+
+    book_authors = fields.Many2many(related='book_id.author_ids')
+    book_edition_date = fields.Date(related='book_id.edition_date')
+    book_publisher = fields.Many2one(related='book_id.publisher_id')
+
+    late_return = fields.Boolean(default=False , compute="_compute_late_return")
+
+    actual_return_date = fields.Date()
+
+
+
+    @api.depends('book_id')
+    def name_get(self):
+        result = []
+        for r in self:
+            name = 'Rental - ' + str(r.id) + ' '  +  r.book_id.name 
+            result.append((r.id, name))
+        return result
+
+    @api.depends('return_date','actual_return_date')
+    def _compute_late_return(self):
+        late_return_flag = False
+        for r in self:
+            if not r.actual_return_date:
+                if (r.return_date < fields.Date.today()):
+                    late_return_flag = True
+            r.late_return = late_return_flag
+
+#    @api.depends('seats', 'attendee_ids')
+#    def _compute_taken_seats(self):
+#        for session in self:
+#            if not session.seats:
+#                session.taken_seats = 0.0
+#            else:
+#                session.taken_seats = 100.0 * len(session.attendee_ids) / session.seats

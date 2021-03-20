@@ -28,4 +28,19 @@
     <record id="publisher_got" model="library.publisher">
         <field name="name">Bantam Spectra</field>
     </record>
+
+    <record id="copy01" model="library.copy">
+        <field name="book_id" ref="book_got"/>
+        <field name="reference">GOT-01</field>
+    </record>
+
+    <record id="copy02" model="library.copy">
+        <field name="book_id" ref="book_got"/>
+        <field name="reference">GOT-02</field>
+    </record>
+
+    <record id="copy03" model="library.copy">
+        <field name="book_id" ref="book_got"/>
+        <field name="reference">GOT-03</field>
+    </record>
 </odoo>

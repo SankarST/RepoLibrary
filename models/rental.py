@@ -10,7 +10,8 @@ class Rentals(models.Model):
     customer_id = fields.Many2one('library.partner', string='Customer',
         domain=[('partner_type','=','customer')] )
 
-    book_id = fields.Many2one('library.book', string='Book')
+    book_id = fields.Many2one('library.book', string='Book' ,related="copy_id.book_id",readonly=True)
+    copy_id = fields.Many2one('library.copy', string="Book Copy")
 
     rental_date = fields.Date()
     return_date = fields.Date(required=True)
@@ -30,11 +31,12 @@ class Rentals(models.Model):
 
     comments = fields.Text(string="Comments");
 
-    @api.depends('book_id')
+    @api.depends('book_id',"copy_id")
     def name_get(self):
         result = []
         for r in self:
-            name = 'Rental - ' + str(r.id) + ' '  +  r.book_id.name 
+            name = 'Rental - ' + str(r.id) + ' '  +  r.copy_id.name
+           # name = 'Rental - ' + str(r.id) 
             result.append((r.id, name))
         return result
 

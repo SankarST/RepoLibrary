@@ -12,3 +12,4 @@ class Partner(models.Model):
     partner_type = fields.Selection([('customer', 'Customer'), ('author', 'Author')], default="customer")
 
     rental_ids = fields.One2many('library.rental', 'customer_id', string='Rentals')
+    book_ids = fields.Many2many('library.book',string='Books') 
