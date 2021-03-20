@@ -60,7 +60,7 @@
                         <page string="Copies Info" name="Copies">
                             <field name="copy_ids">
                                 <tree editatble="bottom">
-                                     <field name="name"/>
+                                     <!--field name="name"/-->
                                      <field name="reference"/>
                                 </tree> 
 			    </field>	 
@@ -145,7 +145,11 @@
                             <field name="description"/>
                         </page-->
                         <page string="Copies Info" name="Copies">
-                            <field name="copy_ids" readonly="True"/>
+                            <field name="copy_ids">
+                            	<tree editable="bottom">
+			            <field name="reference"/>
+                                </tree>
+                            </field>
                         </page>
                         <page string="Rentals" name="Rentals">
                             <field name="rental_ids" readonly="True">
