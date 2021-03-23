@@ -23,53 +23,41 @@
         </field>
     </record>
 
-<record id="partner_view_form" model="ir.ui.view">
+
+    <record id="partner_view_form" model="ir.ui.view">
         <field name="name">library.partner.form</field>
         <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <form string="Contact">
-                <field name="is_company" invisible="1"/>
-                <field name="type" invisible="1"/>
-                <field name="image_1920" widget='image' class="oe_avatar" options='{"preview_image": "image_128"}'/>
-                <div class="oe_title">
-                    <field name="company_type" options="{'horizontal': true}" class="oe_edit_only" widget="radio"/>
-                    <h1>
-                        <field name="name" default_focus="1" placeholder="Name"
-                               attrs="{'required' : [('type', '=', 'contact')]}"/>
-                    </h1>
-                    <field name="parent_id"
-                           placeholder="Company"
-                           domain="[('is_company', '=', True)]" context="{'default_is_company': True}"
-                           attrs="{'invisible': [('is_company','=', True)]}"/>
-                </div>
-                <group>
-                    <field name="function" placeholder="e.g. Sales Director"/>
-                    <field name="user_ids" invisible="1"/>
-                    <field name="email" widget="email" required="context.get('force_email', False)"
-                           attrs="{'required': [('user_ids','!=', [])]}"/>
-                    <field name="phone" widget="phone"/>
-                    <field name="mobile" widget="phone"/>
+            <group name="purchase" position="after">
+                <group string="Library Mgmt" name="library">
                     <field name="is_author"/>
                     <field name="is_publisher"/>
                 </group>
-                <!--group>
-                    <field name="book_ids" attrs="{'invisible':[('is_author', '=', False)]}" readonly="True"/>
-                    <field name="rental_ids" attrs="{'invisible':['|',('is_author', '=', True) ,('is_publisher','=', True)]}"/>
-       		    <field name="books_published" readonly="True"/>
-		</group-->            
-               <notebook>
-                    <page string="Books" name="Books"  attrs="{'invisible':[('is_author', '=', False)]}" >
-                             <field name="book_ids" readonly="True"/>
-                    </page>
-                    <page string="Rented Books" name="Rentals"  attrs="{'invisible':['|',('is_author', '=', True),('is_publisher','=',True)]}" >
-                             <field name="rental_ids" readonly="True"/>
-                    </page>
-                    <page string="Books Published" name="Published"  attrs="{'invisible':[('is_publisher', '=', False)]}" >
-                             <field name="books_published" readonly="True"/>
-                    </page>
-		</notebook>
-  
-           </form>
+            </group>
+            <page name="sales_purchases" position="after">
+		<page string="Books" name="Books"  attrs="{'invisible':[('is_author', '=', False)]}" >
+	            <field name="book_ids" readonly="True"/>
+	        </page>
+	        <page string="Rented Books" name="Rentals"  attrs="{'invisible':['|',('is_author', '=', True),('is_publisher','=',True)]}" >
+                     <field name="rental_ids" readonly="True"/>
+                </page>
+                <page string="Books Published" name="Published"  attrs="{'invisible':[('is_publisher', '=', False)]}" >
+                     <field name="books_published" readonly="True"/>
+                </page>
+	    </page>
+        </field>
+    </record>
+
+    <record id="partner_view_search" model="ir.ui.view">
+        <field name="name">library.partner.search</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <filter name="inactive" position="after">
+                <filter string="Authors" name="is_author" domain="[('is_author', '=', True)]"/>
+    		<filter string="Publishers" name="is_publisher" domain="[('is_publisher', '=', True)]"/>
+            </filter>
         </field>
     </record>
 
