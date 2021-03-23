@@ -72,6 +72,6 @@
             name="Publishers"
             parent="library.settings_menu"
             sequence="10"
-            action="library.publisher_action"
+            action="library.partner_action"
     />
 </odoo>

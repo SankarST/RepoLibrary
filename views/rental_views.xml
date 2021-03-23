@@ -37,7 +37,12 @@
                             <field name="id" string="Rental Ref #"/>
                         </group>
                         <group>
-                            <field name="customer_id"/>
+<!-- widget=selection just displays selectable list. nothing else allowed-->
+<!--                            <field name="customer_id" domain="[('is_author', '=', False)]" widget="selection"/ -->
+                            <field name="customer_id" 
+				domain="[('is_author', '=', False),('is_publisher','=',False)]" 
+				options="{'no_open': True, 'no_create': True}"/>
+				<!--<options="{'no_quick_create': True, 'no_create_edit' : True}"/>-->
                             <field name="customer_email"/>
                             <field name="customer_address"/>
                         </group>

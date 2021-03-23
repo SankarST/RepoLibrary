@@ -41,7 +41,7 @@
                             <field name="copy_count" string="Copy #"/>
                         </group>
                         <group>
-                            <field name="publisher_id"/>
+                            <field name="publisher_id" domain="[('is_publisher','=',True)]"/>
                             <field name="edition_date"/>
                         </group>
                     </group>
@@ -50,16 +50,16 @@
                             <field name="description"/>
                         </page-->
                         <page string="Authors" name="Authors">
-                            <field name="author_ids" domain="[('partner_type', '=', 'author')]" readonly="False">
-                                <tree editable="bottom">
+                            <field name="author_ids" domain="[('is_author', '=', True)]" readonly="False">
+                              -->  <tree editable="bottom">
                                     <field name="name"/>
                                     <field name="email"/>                                   
                                 </tree>
                             </field>
                         </page>
                         <page string="Copies Info" name="Copies">
-                            <field name="copy_ids">
-                                <tree editatble="bottom">
+                            <field name="copy_ids" readonly="True">
+                                <tree>
                                      <!--field name="name"/-->
                                      <field name="reference"/>
                                 </tree> 
@@ -73,8 +73,8 @@
                                     <field name="customer_id"/>
                                     <field name="rental_date"/>
                                     <field name="return_date"/>
-                                    <field name="customer_email"/>
-                                </tree>
+<!--                                    <field name="customer_email"/>
+    -->                            </tree>
                             </field>
                         </page>
 
@@ -141,9 +141,6 @@
                          <field name="reference"/>
                     </group>
                     <notebook>
-                        <!--page string="Description" name="desc">
-                            <field name="description"/>
-                        </page-->
                         <page string="Copies Info" name="Copies">
                             <field name="copy_ids">
                             	<tree editable="bottom">
@@ -154,7 +151,7 @@
                         <page string="Rentals" name="Rentals">
                             <field name="rental_ids" readonly="True">
                                 <tree>
-                                    <field name="id"/>
+                                    <!--field name="id"/-->
                                     <field name="customer_id"/>
                                     <field name="rental_date"/>
                                     <field name="return_date"/>
@@ -164,15 +161,6 @@
                                 </tree>
                             </field>
                         </page>
-                        <!--page string="Authors" name="Authors">
-                            <field name="author_ids" domain="[('partner_type', '=', 'author')]" readonly="True">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="email"/>                                   
-                                </tree>
-                            </field>
-                        </page-->
-                       
 
 
                     </notebook>
@@ -180,7 +168,6 @@
             </form>
         </field>
     </record>
-
 
 
     <record id="book_action" model="ir.actions.act_window">
@@ -196,3 +183,4 @@
         <field name="view_mode">tree,form</field>
     </record>
 </odoo>
+

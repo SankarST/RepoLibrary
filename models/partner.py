@@ -3,13 +3,24 @@ from odoo import fields, models
 
 
 class Partner(models.Model):
-    _name = 'library.partner'
-    _description = 'Partner'
 
-    name = fields.Char()
-    email = fields.Char()
-    address = fields.Text()
-    partner_type = fields.Selection([('customer', 'Customer'), ('author', 'Author')], default="customer")
+    _inherit = 'res.partner'
+
+    is_author = fields.Boolean(string="Is an Author", default=False)
+    is_publisher = fields.Boolean(string="Is a Publisher", default=False)
 
     rental_ids = fields.One2many('library.rental', 'customer_id', string='Rentals')
     book_ids = fields.Many2many('library.book',string='Books') 
+    books_published = fields.One2many('library.book', 'publisher_id',string='Books Published')
+
+#    _name = 'library.partner'
+#    _description = 'Partner'
+
+#    name = fields.Char()
+#    email = fields.Char()
+#    address = fields.Text()
+#    partner_type = fields.Selection([('customer', 'Customer'), ('author', 'Author')], default="customer")
+
+#    rental_ids = fields.One2many('library.rental', 'customer_id', string='Rentals')
+#     book_ids = fields.Many2many('library.book',string='Books') 
+
