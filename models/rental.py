@@ -7,11 +7,13 @@ class Rentals(models.Model):
     _description = 'Book rental'
 
 
-    customer_id = fields.Many2one('res.partner', string='Customer',
-        domain=['&', ('is_author','!=',True),('is_publisher','!=' , True)] )
+    customer_id = fields.Many2one('res.partner', string='Customer' ,
+        domain=[('customer','=',True)])
+       # domain=['&', ('is_author','!=',True),('is_publisher','!=' , True)] )
 
-    book_id = fields.Many2one('library.book', string='Book' ,related="copy_id.book_id",readonly=True,required=True)
     copy_id = fields.Many2one('library.copy', string="Book Copy")
+    book_id = fields.Many2one('product.product', string='Book' ,related="copy_id.book_id",readonly=True,required=True)
+
 
     rental_date = fields.Date(required=True)
     return_date = fields.Date(required=True)
@@ -21,9 +23,9 @@ class Rentals(models.Model):
     customer_email = fields.Char(related='customer_id.email')
     
 
-    book_authors = fields.Many2many(related='book_id.author_ids')
-    book_edition_date = fields.Date(related='book_id.edition_date')
-    book_publisher = fields.Many2one(related='book_id.publisher_id')
+    book_authors = fields.Many2many(related='copy_id.author_ids')
+    book_edition_date = fields.Date(related='copy_id.edition_date')
+    book_publisher = fields.Many2one(related='copy_id.publisher_id')
     book_author_names = fields.Char(compute = '_compute_book_author_names',string="Authors")
 
 

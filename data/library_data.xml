@@ -13,6 +13,7 @@
         <field name="email">daenerys@targaryan.org</field>
         <field name="city">Top of the Pyramid</field>
         <field name="country_id" ref="country_mereen"/>
+        <field name="customer">1</field>
     </record>
 
     <record id="customer_tyrion" model="res.partner">
@@ -20,12 +21,13 @@
         <field name="email">tyrion@lannister.org</field>
         <field name="city">Red keep</field>
         <field name="country_id" ref="country_kings_landing"/>
+        <field name="customer" eval="True"/>
     </record>
 
     <record id="author_martin" model="res.partner">
         <field name="name">George R.R. Martin</field>
         <field name="email">george@got.org</field>
-        <field name="contact_address">Bayonne, New Jersey, United States</field>
+        <field name="street">Bayonne, New Jersey, United States</field>
         <field name="is_author" eval="True"/>
     </record>
 
@@ -35,12 +37,13 @@
         <field name="is_publisher" eval="True"/>
     </record>
 
-    <record id="book_got" model="library.book">
+    <record id="book_got" model="product.product">
         <field name="name">Game of Thrones</field>
         <field name="edition_date">1996-08-01</field>
         <field name="isbn">0-553-10354-7</field>
         <field name="publisher_id" ref="publisher_got"/>
         <field name="author_ids" eval="[(4, ref('author_martin'))]"/>
+        <field name="is_book">1</field>
     </record>
 
     <record id="copy01" model="library.copy">
@@ -57,4 +60,19 @@
         <field name="book_id" ref="book_got"/>
         <field name="reference">GOT-03</field>
     </record>
+
+    <!--record id="price_rent" model="library.price">
+        <field name="name">Week fee</field>
+        <field name="duration">1</field>
+        <field name="price">0.2</field>
+        <field name="type">time</field>
+    </record>
+
+    <record id="price_loss" model="library.price">
+        <field name="name">Loss fee</field>
+        <field name="price">20</field>
+        <field name="type">one</field>
+    </record-->
 </odoo>
+
+

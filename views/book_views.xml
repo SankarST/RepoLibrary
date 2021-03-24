@@ -4,49 +4,49 @@
 
     <record id="book_view_list" model="ir.ui.view">
         <field name="name">library.book.list</field>
-        <field name="model">library.book</field>
+        <field name="model">product.product</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <!--field name="author_ids"/-->
                 <field name="author_names" string="Authors"/>
                 <field name="edition_date"/>
                 <field name="copy_count" string="Copy #"/>
                 <field name="publisher_id"/>
                 <field name="isbn"/>
+                <field name="is_book"/>
             </tree>
         </field>
     </record>
 
     <record id="book_view_form" model="ir.ui.view">
         <field name="name">library.book.form</field>
-        <field name="model">library.book</field>
+        <field name="model">product.product</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
                     <group>
                         <group>
                             <field name="name"/>
+                            <field name="author_ids" context="{'default_author': True}" widget="many2many_tags"/>
                             <field name="isbn"/>
                             <field name="copy_count" string="Copy #"/>
                         </group>
                         <group>
                             <field name="publisher_id" domain="[('is_publisher','=',True)]"/>
                             <field name="edition_date"/>
+			    <field name="is_book" invisible="1"/>
+
                         </group>
                     </group>
                     <notebook>
-                        <!--page string="Description" name="desc">
-                            <field name="description"/>
-                        </page-->
-                        <page string="Authors" name="Authors">
+                        <!--page string="Authors" name="Authors">
                             <field name="author_ids" domain="[('is_author', '=', True)]" readonly="False">
-                              -->  <tree editable="bottom">
+                                <tree editable="bottom">
                                     <field name="name"/>
                                     <field name="email"/>                                   
                                 </tree>
                             </field>
-                        </page>
+                        </page-->
                         <page string="Copies Info" name="Copies">
                             <field name="copy_ids" readonly="True">
                                 <tree>
@@ -78,9 +78,10 @@
 
      <record model="ir.ui.view" id="book_view_search">
 	<field name="name">book.search</field>
-	    <field name="model">library.book</field>
+	    <field name="model">product.product</field>
 	    <field name="arch" type="xml">
-	    <search>
+	    <!--filter string="Books" name="is_book" domain="[('is_book', '=', 1)]"/--> <!-- to be added in book_action -->
+            <search>
 	        <field name="name"/>
 	        <field name="isbn"/>
 	        <field name="publisher_id"/>
@@ -116,12 +117,12 @@
         <field name="arch" type="xml">
             <field name="name" position="replace">
                 <field name="book_id"/>
-		<field name="author_names" string="Authors"/>
+		<!--field name="author_names" string="Authors"/-->
             </field>
             <field name="isbn" position="after">
                 <field name="reference"/>
             </field>
-            <page name="Authors" position="replace">
+            <page name="Copies" position="before">
                 <page string="Rentals" name="rentals" readonly="True">
                     <field name="rental_ids" readonly="True"/>
                 </page>
@@ -145,8 +146,10 @@
 
     <record id="book_action" model="ir.actions.act_window">
         <field name="name">Books</field>
-        <field name="res_model">library.book</field>
+        <field name="res_model">product.product</field>
+        <field name="domain">[('is_book','=',True)]</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{'default_is_book':'True'}</field>
     </record>
 
 
@@ -155,5 +158,20 @@
         <field name="res_model">library.copy</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <record id="book_action_view_tree" model="ir.actions.act_window.view">
+        <field name="view_mode">tree</field>
+        <field name="sequence" eval="20"/>
+        <field name="view_id" ref="library.book_view_list"/>
+        <field name="act_window_id" ref="library.book_action"/>
+    </record>
+
+    <record id="book_action_view_form" model="ir.actions.act_window.view">
+        <field name="view_mode">form</field>
+        <field name="sequence" eval="20"/>
+        <field name="view_id" ref="library.book_view_form"/>
+        <field name="act_window_id" ref="library.book_action"/>
+    </record>
+
 </odoo>
 

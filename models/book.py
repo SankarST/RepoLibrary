@@ -3,23 +3,22 @@ from odoo import fields, models, api
 
 
 class Books(models.Model):
-    _name = 'library.book'
-    _description = 'Book'
+    _inherit = 'product.product'
 
-    name = fields.Char(string='Title')
-
-    author_ids = fields.Many2many("res.partner", string="Authors") 
-#        domain=[('partner_type','=','author')] )
+    author_ids = fields.Many2many("res.partner", string="Authors",
+        domain=[('is_author','=',True)] )
     edition_date = fields.Date()
     isbn = fields.Char(string='ISBN',unique=True)
-    publisher_id = fields.Many2one('res.partner', string='Publisher')
+    publisher_id = fields.Many2one('res.partner', string='Publisher',
+        domain=[('is_publisher','=',True)])
 
 # moved to bookcopy
-    rental_ids = fields.One2many('library.rental',related = 'copy_ids.rental_ids',  string='Rentals')
+#    rental_ids = fields.One2many('library.rental',related = 'copy_ids.rental_ids',  string='Rentals')
     author_names = fields.Char(compute = '_compute_author_names')
 
     copy_ids = fields.One2many('library.copy','book_id',string="Book Copies")
     copy_count = fields.Integer(compute = '_compute_copy_count')
+    is_book = fields.Boolean(string='Is a Book',default=False)
 
     @api.depends('author_ids')
     def _compute_author_names(self):
@@ -34,17 +33,15 @@ class Books(models.Model):
     @api.depends('copy_ids')
     def _compute_copy_count(self):
         for r in self:
-#            if r.copy_ids:
             r.copy_count = len(r.copy_ids)
-#            else :
-#                r.copy_count = 1;
+
 
 class BookCopy(models.Model):
     _name = 'library.copy'
     _description = 'Book Copy'
     _rec_name = 'reference'
 
-    book_id = fields.Many2one('library.book', string="Book", required=True, ondelete="cascade", delegate=True)
-    reference = fields.Char(required=True)
+    book_id = fields.Many2one('product.product', string="Book", domain=[('is_book','=',True)], required=True, ondelete="cascade", delegate=True)
+    reference = fields.Char(required=True , string="Ref")
 
     rental_ids = fields.One2many('library.rental', 'copy_id', string='Rentals')
