@@ -29,13 +29,13 @@
             action="library.copy_action"
     />
 
-    <!--menuitem
+    <menuitem
             id="author_menu_action"
             name="Authors"
             parent="library.book_menu"
             sequence="30"
             action="author_action"
-    /-->
+    />
 
     <menuitem
             id="partner_menu"
