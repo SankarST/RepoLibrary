@@ -14,6 +14,8 @@ class Partner(models.Model):
     book_ids = fields.Many2many('product.product',string='Books') 
     books_published = fields.One2many('product.product', 'publisher_id',string='Books Published')
     
+    birthdate = fields.Date()
+    nationality_id = fields.Many2one('res.country',ondelete='set null', string="Nationality", index=True)
 
 #    _name = 'library.partner'
 #    _description = 'Partner'
@@ -25,16 +27,3 @@ class Partner(models.Model):
 
 #    rental_ids = fields.One2many('library.rental', 'customer_id', string='Rentals')
 #     book_ids = fields.Many2many('library.book',string='Books') 
-
-class Author(models.Model):
-
-
-    _inherit = 'res.partner'
-
-#    _rec_name = 'author'
-
-#    partner_id = fields.Many2one('res.partner',string="Partner", domain=[('is_author','=',True)], required=True , ondelete="cascade", delegate=True) 
-    
-    birthdate = fate = fields.Date() #required=True, default=fields.Date.context_today)
-    nationality_id = fields.Many2one('res.country',ondelete='set null', string="Nationality", index=True)
-
