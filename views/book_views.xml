@@ -102,6 +102,7 @@
                 <!--field name="author_ids"/-->
 		<field name="reference" string="Copy Info"/>
                 <field name="author_names" string="Authors"/>
+                <field name="book_state"/>
                 <field name="edition_date"/>
                 <field name="publisher_id"/>
                 <field name="isbn"/>
@@ -115,6 +116,12 @@
         <field name="mode">primary</field>
         <field name="inherit_id" ref="library.book_view_form"/>
         <field name="arch" type="xml">
+            <sheet position="before">
+                <header>
+                    <field name="book_state" widget="statusbar" nolabel="1"
+                           statusbar_visible="available,rented,lost"/>
+                </header>
+            </sheet>
             <field name="name" position="replace">
                 <field name="book_id"/>
 		<!--field name="author_names" string="Authors"/-->

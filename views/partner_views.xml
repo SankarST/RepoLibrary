@@ -52,33 +52,25 @@
                         <field name="is_publisher"/>
                         <field name="customer"/>     
                     </group>
-		    <!--field name="qty_lost_book" invisible="1"/-->
+		    <field name="qty_lost_book" invisible="1"/>
                     <notebook>
 	                
-	               <!--page string="Current rentals" name="current_rentals">
-	                    <field name="rental_ids" readonly="1">
-	                        <tree>
-	                            <field name="book_id"/>
-	                            <field name="rental_date"/>
-	                            <field name="return_date"/>
-	                        </tree>
-	                    </field>
-	               </page-->
-			<page string="Books" name="Books"  attrs="{'invisible':[('is_author', '=', False)]}" >
+	              	<page string="Books" name="Books"  attrs="{'invisible':[('is_author', '=', False)]}" >
 		            <field name="book_ids" readonly="True"/>
 		        </page>
-		        <page string="Rentals" name="Rentals"  attrs="{'invisible':[('customer', '=', False)]}" >
+		        <!--page string="Rentals" name="Rentals"  attrs="{'invisible':[('customer', '=', False)]}" >
 	                     <field name="rental_ids" readonly="True"/>
-	                </page>
+	                </page-->
 	                <page string="Books Published" name="Published"  attrs="{'invisible':[('is_publisher', '=', False)]}" >
 	                     <field name="books_published" readonly="True"/>
 	                </page>
 
 
-                       <!--page string="Current rentals" name="current_rentals">
+                       <page string="Current rentals" name="current_rentals">
                             <field name="current_rental_ids" readonly="1">
                                 <tree>
                                     <field name="book_id"/>
+                                    <field name="book_author_names"/>
                                     <field name="rental_date"/>
                                     <field name="return_date"/>
                                 </tree>
@@ -88,6 +80,7 @@
                             <field name="old_rental_ids" readonly="1">
                                 <tree>
                                     <field name="book_id"/>
+				    <field name="book_author_names"/>
                                     <field name="rental_date"/>
                                     <field name="return_date"/>
                                 </tree>
@@ -98,11 +91,12 @@
                             <field name="lost_rental_ids" readonly="1">
                                 <tree>
                                     <field name="book_id"/>
+				    <field name="book_author_names"/>
                                     <field name="rental_date"/>
                                     <field name="return_date"/>
                                 </tree>
                             </field>
-                        </page-->
+                        </page>
                     </notebook>
                 </sheet>
             </form>

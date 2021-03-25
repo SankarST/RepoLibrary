@@ -18,6 +18,7 @@
                 <field name="book_author_names"/>
                 <field name="actual_return_date"/>
                 <field name="late_return"/>
+                <field name="state"/>
 
            </tree>
         </field>
@@ -31,6 +32,14 @@
         <field name="model">library.rental</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_return" states="rented" string="Return" type="object"/>
+                    <button name="action_lost" states="rented" string="Lost" type="object"/>
+                    <button name="action_confirm" states="draft" string="Confirm" type="object"/>
+                    <field name="state" widget="statusbar" nolabel="1"
+                           statusbar_visible="draft,rented,returned,lost"/>
+                </header>
+
                 <sheet>
                     <group>
                         <group>
@@ -39,9 +48,8 @@
                         <group>
 <!-- widget=selection just displays selectable list. nothing else allowed-->
 <!--                            <field name="customer_id" domain="[('is_author', '=', False)]" widget="selection"/ -->
-                            <field name="customer_id" 
-				domain="[('is_author', '=', False),('is_publisher','=',False)]" 
-				options="{'no_open': True, 'no_create': True}"/>
+                            <field name="customer_id"
+				options="{'no_open': True, 'no_create': True}"/> <!-- domain set in model-->
 				<!--<options="{'no_quick_create': True, 'no_create_edit' : True}"/>-->
                             <field name="customer_email"/>
                             <field name="customer_address"/>
@@ -102,5 +110,6 @@
         <field name="name">Rentals</field>
         <field name="res_model">library.rental</field>
         <field name="view_mode">tree,form</field>
-    </record>
+        <field name="domain">[('state','in',['draft', 'rented'])]</field>
+   </record>
 </odoo>

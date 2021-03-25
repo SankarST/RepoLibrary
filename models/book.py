@@ -45,3 +45,4 @@ class BookCopy(models.Model):
     reference = fields.Char(required=True , string="Ref")
 
     rental_ids = fields.One2many('library.rental', 'copy_id', string='Rentals')
+    book_state = fields.Selection([('available', 'Available'), ('rented', 'Rented'), ('lost', 'Lost')], default="available")
