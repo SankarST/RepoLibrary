@@ -30,6 +30,8 @@
         "views/partner_views.xml",
         "views/rental_views.xml",
         "views/author_views.xml",
+        "views/price_views.xml",
+        "views/payment_views.xml",
         "views/menu_views.xml",
         "data/library_data.xml",
     ],

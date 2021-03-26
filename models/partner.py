@@ -25,9 +25,27 @@ class Partner(models.Model):
 
     qty_lost_book = fields.Integer(string='Number of book copies lost', compute="_get_lost_books_qty")
 
+    payment_ids = fields.One2many('library.payment', 'customer_id', string='Payments')
+    amount_owed = fields.Float(compute="_amount_owed", store=True)
+
     def _get_lost_books_qty(self):
         for rec in self:
             rec.qty_lost_book = len(rec.lost_rental_ids)
+
+
+    @api.depends('payment_ids.amount')
+    def _amount_owed(self):
+        for rec in self:
+            rec.amount_owed = - sum(rec.payment_ids.mapped('amount'))
+
+class Payment(models.Model):
+    _name = 'library.payment'
+    _description = 'Payment'
+
+    date = fields.Date(required=True, default=fields.Date.context_today)
+    amount = fields.Float()
+    customer_id = fields.Many2one('res.partner', string='Customer', domain=[('customer', '=', True)])
+
 
 
 #    _name = 'library.partner'

@@ -16,6 +16,7 @@
                 <field name="country_id" invisible="1"/>
                 <field name="parent_id" invisible="1"/>
                 <field name="active" invisible="1"/>
+		<field name="amount_owed"/>
                 <field name="is_author"/> 
                 <field name="is_publisher"/>
             </tree>
@@ -36,7 +37,7 @@
                     </div>
 
                     <group>
-                        <!--field name="amount_owed"/-->
+                        <field name="amount_owed"/>
                         <field name="email"/>
                         <label for="street" string="Address"/>
                         <div class="o_address_format">
@@ -133,6 +134,9 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_res_partner_filter"/>
         <field name="arch" type="xml">
+            <search>
+                <field name="amount_owed"/>
+            </search>
             <filter name="inactive" position="after">
                 <filter string="Authors" name="is_author" domain="[('is_author', '=', True)]"/>
     		<filter string="Publishers" name="is_publisher" domain="[('is_publisher', '=', True)]"/>

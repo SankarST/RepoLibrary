@@ -41,25 +41,25 @@ class Rentals(models.Model):
         for rec in self:
             rec.state = 'rented'
             rec.copy_id.book_state = 'rented'
-#            rec.add_fee('time')
+            rec.add_fee('time')
 
-#    def add_fee(self, type):
-#        for rec in self:
-#            if type == 'time':
-#                price_id = self.env.ref('library.price_rent')
-#                delta_dates = fields.Date.from_string(rec.return_date) - fields.Date.from_string(rec.rental_date)
-#                amount = delta_dates.days * price_id.price / price_id.duration
-#            elif type == 'loss':
-#                price_id = self.env.ref('library.price_loss')
-#                amount = price_id.price
-#            else:
-#                return
-#
-#            self.env['library.payment'].create({
-#                'customer_id': rec.customer_id.id,
-#                'date':        rec.rental_date,
-#                'amount':      - amount,
-#            })
+    def add_fee(self, type):
+        for rec in self:
+            if type == 'time':
+                price_id = self.env.ref('library.price_rent')
+                delta_dates = fields.Date.from_string(rec.return_date) - fields.Date.from_string(rec.rental_date)
+                amount = delta_dates.days * price_id.price / price_id.duration
+            elif type == 'loss':
+                price_id = self.env.ref('library.price_loss')
+                amount = price_id.price
+            else:
+                return
+
+            self.env['library.payment'].create({
+                'customer_id': rec.customer_id.id,
+                'date':        rec.rental_date,
+                'amount':      - amount,
+            })
 
     def action_return(self):
         for rec in self:
@@ -71,7 +71,7 @@ class Rentals(models.Model):
             rec.state = 'lost'
             rec.copy_id.book_state = 'lost'
             rec.copy_id.active = False
- #           rec.add_fee('loss')
+            rec.add_fee('loss')
 
 
 
