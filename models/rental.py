@@ -73,7 +73,12 @@ class Rentals(models.Model):
             rec.copy_id.active = False
             rec.add_fee('loss')
 
-
+    @api.model
+    def _cron_check_date(self):
+        late_rentals = self.search([('state', '=', 'rented'), ('return_date', '<', fields.Date.today())])
+        template_id = self.env.ref('library.mail_template_book_return')
+        for rec in late_rentals:
+            mail_id = template_id.send_mail(rec.id)
 
 
     @api.depends('book_id',"copy_id")
