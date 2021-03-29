@@ -18,7 +18,7 @@ class Rentals(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('rented', 'Rented'), ('returned', 'Returned'), ('lost', 'Lost')], default="draft")
 
 
-    rental_date = fields.Date(required=True)
+    rental_date = fields.Date(default=fields.Date.context_today, required=True)
     return_date = fields.Date(required=True)
 
 

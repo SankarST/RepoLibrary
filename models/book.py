@@ -46,3 +46,24 @@ class BookCopy(models.Model):
 
     rental_ids = fields.One2many('library.rental', 'copy_id', string='Rentals')
     book_state = fields.Selection([('available', 'Available'), ('rented', 'Rented'), ('lost', 'Lost')], default="available")
+
+
+    readers_count = fields.Integer(compute="_compute_readers_count")
+
+    def open_readers(self):
+        self.ensure_one()
+        reader_ids = self.rental_ids.mapped('customer_id')
+        return {
+            'name':      'Readers of %s' % (self.name),
+            'type':      'ir.actions.act_window',
+            'res_model': 'res.partner',
+            'view_mode': 'tree,form',
+            'view_type': 'form',
+            'domain':    [('id', 'in', reader_ids.ids)],
+            'target':    'new',
+        }
+
+    @api.depends('rental_ids.customer_id')
+    def _compute_readers_count(self):
+        for book in self:
+            book.readers_count = len(book.mapped('rental_ids'))

@@ -24,6 +24,13 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <field name="image_1920" widget='image' class="oe_left oe_avatar"/>
+                    <div class="oe_title oe_left">
+                        <h1>
+                            <field name="name" placeholder="Name"/>
+                        </h1>
+                    </div>
+
                     <group>
                         <group>
                             <field name="name"/>
@@ -117,11 +124,30 @@
         <field name="inherit_id" ref="library.book_view_form"/>
         <field name="arch" type="xml">
             <sheet position="before">
-                <header>
+		<header>
                     <field name="book_state" widget="statusbar" nolabel="1"
                            statusbar_visible="available,rented,lost"/>
                 </header>
-            </sheet>
+	    </sheet>
+            <div class="oe_title oe_left" position="before">
+            
+                <div class="oe_button_box" name="buttons">
+                    <button type="object" class="oe_stat_button"
+                            icon="fa-users"
+                            name="open_readers">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="readers_count"/>
+                            </span>
+                            <span class="o_stat_text">
+                                Readers
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+           
             <field name="name" position="replace">
                 <field name="book_id"/>
 		<!--field name="author_names" string="Authors"/-->
