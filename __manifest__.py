@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 {
-    'name':        "Library Management",
+    'name':        "LIBRARY Management",
 
     'summary':
                    """
-                   Library management
+                   Library Management
                    """,
 
     'description': """
-        Manage a Library: customers, books, etc.... 
+        Manage a LIBRARY: customers, books, etc.... 
     """,
 
     'author':      "Odoo",
