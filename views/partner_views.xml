@@ -6,7 +6,7 @@
         <field name="model">res.partner</field>
         <field eval="8" name="priority"/>
         <field name="arch" type="xml">
-            <tree string="Contacts">
+            <tree string="Contacts" name="contacts">
                 <field name="display_name" string="Name"/>
                 <field name="function" invisible="1"/>
                 <field name="phone"/>
@@ -23,8 +23,22 @@
         </field>
     </record>
 
+    <record id="publisher_view_tree" model="ir.ui.view">
+        <field name="name">library.publisher.tree</field>
+        <field name="model">res.partner</field>
+        <field eval="4" name="priority"/>
+        <field name="inherit_id" ref="library.partner_view_tree"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+          	<field name="amount_owed" position="replace"/>
+                <!--field name="is_author"/> 
+                <field name="is_publisher"/-->
+            
+        </field>
+    </record>
 
- <record id="partner_view_form" model="ir.ui.view">
+
+    <record id="partner_view_form" model="ir.ui.view">
         <field name="name">library.partner.form</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
@@ -35,9 +49,9 @@
                             <field name="name" placeholder="Name"/>
                         </h1>
                     </div>
-
-                    <group>
-                        <field name="amount_owed"/>
+		    <group>
+			<field name="partner_type" invisible="1"/> 
+                        <field name="amount_owed" attrs="{'invisible':[('partner_type','=','publisher')]}"/>
                         <field name="email"/>
                         <label for="street" string="Address"/>
                         <div class="o_address_format">
@@ -67,7 +81,7 @@
 	                </page>
 
 
-                       <page string="Current rentals" name="current_rentals">
+                       <page string="Current rentals" name="current_rentals" attrs="{'invisible':[('customer','=',False)]}">
                             <field name="current_rental_ids" readonly="1">
                                 <tree>
                                     <field name="book_id"/>
@@ -77,7 +91,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Old rentals" name="old_rentals">
+                        <page string="Old rentals" name="old_rentals" attrs="{'invisible':[('customer','=',False)]}">
                             <field name="old_rental_ids" readonly="1">
                                 <tree>
                                     <field name="book_id"/>
@@ -137,18 +151,46 @@
             <search>
                 <field name="amount_owed"/>
             </search>
-            <filter name="inactive" position="after">
+            <!--filter name="inactive" position="after">
                 <filter string="Authors" name="is_author" domain="[('is_author', '=', True)]"/>
     		<filter string="Publishers" name="is_publisher" domain="[('is_publisher', '=', True)]"/>
-            </filter>
+            </filter-->
         </field>
     </record>
 
     <record id="partner_action" model="ir.actions.act_window">
         <field name="name">Contacts</field>
         <field name="res_model">res.partner</field>
-        <!--field name="domain">[('customer','=',True)]</field-->
+        <field name="domain">[('customer','=',True)]</field>
+        <field name="context"> {
+   		'default_customer':True,
+                'default_partner_type':'customer',
+	    }
+        </field>
         <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record id="publisher_action" model="ir.actions.act_window">
+        <field name="name">Publisher</field>
+        <field name="res_model">res.partner</field>
+        <field name="domain">[('is_publisher','=',True)]</field>
+        <field name="context"> {
+   		'default_is_publisher':True,
+                'default_customer':False,
+                'default_partner_type':'publisher',
+	    }
+        </field>
+
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Add a Publisher
+                </p><p>
+                  Publishers are mapped to their books.
+                </p>
+        </field>
+
     </record>
 
 
@@ -160,12 +202,28 @@
         <field name="act_window_id" ref="library.partner_action"/>
     </record>
 
+    <record id="publisher_action_view_tree" model="ir.actions.act_window.view">
+        <field name="view_mode">tree</field>
+        <field name="sequence" eval="10"/>
+        <field name="view_id" ref="library.publisher_view_tree"/>
+        <field name="act_window_id" ref="library.publisher_action"/>
+
+    </record>
+
+    <record id="publisher_action_view_form" model="ir.actions.act_window.view">
+        <field name="view_mode">form</field>
+        <field name="sequence" eval="20"/>
+        <field name="view_id" ref="library.partner_view_form"/>
+        <field name="act_window_id" ref="library.publisher_action"/>
+    </record>
+
     <record id="partner_action_view_form" model="ir.actions.act_window.view">
         <field name="view_mode">form</field>
         <field name="sequence" eval="20"/>
         <field name="view_id" ref="library.partner_view_form"/>
         <field name="act_window_id" ref="library.partner_action"/>
     </record>
+
 
 
 </odoo>

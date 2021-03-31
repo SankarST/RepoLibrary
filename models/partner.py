@@ -10,6 +10,12 @@ class Partner(models.Model):
     is_publisher = fields.Boolean(string="Is a Publisher", default=False)
     customer = fields.Boolean(string="Is Customer",default=True)
 
+    partner_type = fields.Selection([
+        ('customer', 'Customer'),
+        ('publisher', 'Publisher'),
+    ], default='customer', tracking=True, required=True)
+
+
     current_rental_ids = fields.One2many('library.rental', 'customer_id', string='Current Rentals', domain=[('state', '=', 'rented')])
     old_rental_ids = fields.One2many('library.rental', 'customer_id', string='Old Rentals', domain=[('state', '=', 'returned')])
     lost_rental_ids = fields.One2many('library.rental', 'customer_id', string='Lost Rentals', domain=[('state', '=', 'lost')])

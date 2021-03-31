@@ -87,8 +87,9 @@
             name="Publishers"
             parent="library.settings_menu"
             sequence="10"
-            action="library.partner_action"
-    />
+            action="library.publisher_action"
+   />
+
 
     <menuitem
             id="price_menu_action"
