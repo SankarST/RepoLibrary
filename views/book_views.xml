@@ -105,9 +105,7 @@
         <field name="model">library.copy</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="book_id"/>
-                <!--field name="author_ids"/-->
-		<field name="reference" string="Copy Info"/>
+                <field name="display_name" string="Books"/>
                 <field name="author_names" string="Authors"/>
                 <field name="book_state"/>
                 <field name="edition_date"/>
@@ -149,9 +147,14 @@
             
            
             <field name="name" position="replace">
-                <field name="book_id"/>
+                <field name="book_id" context="{'default_is_book': True}"/>
 		<!--field name="author_names" string="Authors"/-->
             </field>
+            	
+            <field name="author_ids"  position="attributes">
+                <attribute name="readonly">True</attribute>
+            </field>
+	
             <field name="isbn" position="after">
                 <field name="reference"/>
             </field>
@@ -170,9 +173,16 @@
         <field name="mode">primary</field>
         <field name="inherit_id" ref="library.book_view_search"/>
         <field name="arch" type="xml">
-            <field name="isbn" position="after">
-                <field name="reference"/>
-            </field>
+	    <field name="name" position="replace">
+		<field name="display_name" filter_domain = "['|',('name' , 'ilike' , self) , ('reference' , 'ilike' , self)]" string="Name" />
+	    </field>
+           
+            <!-- Below code Not needed as reference is captured in display_name/-->
+           
+            <!--field name="isbn" position="after">
+                <field name="reference"/> 
+	    </field-->
+          
         </field>
     </record>
 

@@ -67,3 +67,16 @@ class BookCopy(models.Model):
     def _compute_readers_count(self):
         for book in self:
             book.readers_count = len(book.mapped('rental_ids'))
+
+
+    def name_get(self):
+        result = []
+        for r in self:
+           result.append((r.id, '%s [  %s ]' % (r.reference , r.name)))
+        return result
+
+
+    def _compute_display_name(self):
+        for r in self:
+            r.display_name= r.name + ' { ' + str(r.reference) + ' }'
+

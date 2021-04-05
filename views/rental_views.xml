@@ -10,9 +10,9 @@
 	          decoration-bf  = "(current_date == return_date)"
 	          default_order="return_date">
 	        <field name="id" string="Rental Ref #"/>
+                <field name="copy_id" string="Book"/>
                 <field name="customer_id"/>
-                <field name="book_id"/>
-                <field name="copy_id" string="Copy #"/>
+                <!--field name="book_id"/-->
                 <field name="rental_date"/>
                 <field name="return_date"/>
                 <field name="book_author_names"/>
@@ -60,7 +60,7 @@
                     <group>
                         <group>
 <!--                            <field name="customer_id" context="{'default_customer': True}"/>
-    -->                        <field name="copy_id" context="{'default_book': True}"/>
+    -->                        <field name="copy_id" context="{'default_book': True}"/> <!-- options="{'no_open': True, 'no_create' : True}"/-->
 
 
                             <field name="book_id"/>
@@ -110,6 +110,23 @@
             </form>
         </field>
     </record>
+
+
+    <record id="rental_view_search" model="ir.ui.view">
+        <field name="name">library.rental.search</field>
+        <field name="model">library.rental</field>
+        <field name="arch" type="xml">
+            <search string="Rentals">
+		<field name="id" string="Rental Ref #"/>
+                <field name="book_id" string="Book"/>
+                <field name="customer_id" string="Customer"/>
+                <!--field name="book_id"/-->
+
+            </search>
+        </field>
+    </record>
+
+
 
     <record id="rental_action" model="ir.actions.act_window">
         <field name="name">Rentals</field>

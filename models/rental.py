@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
+import logging
+
+
 from datetime import timedelta,datetime
 from odoo import fields, models,api
+
+_logger = logging.getLogger(__name__)
+
 
 class Rentals(models.Model):
     _name = 'library.rental'
     _description = 'Book rental'
     _order = "rental_date desc,return_date desc"
 
+
+    _logger.info('---Rental module test---------------------')
+    
     customer_id = fields.Many2one('res.partner', string='Customer' ,
         domain=[('customer','=',True)],required=True)
        # domain=['&', ('is_author','!=',True),('is_publisher','!=' , True)] )
@@ -20,7 +29,7 @@ class Rentals(models.Model):
     return_date = fields.Date(required=True)
 
 
-    customer_address = fields.Text(compute='_compute_customer_address')
+    customer_address = fields.Text(default='Test' ,compute='_compute_customer_address')
     customer_email = fields.Char(related='customer_id.email')
 
 
@@ -85,10 +94,22 @@ class Rentals(models.Model):
     def name_get(self):
         result = []
         for r in self:
-            name = 'Rental - ' + str(r.id) + ' '  +  r.copy_id.name
-           # name = 'Rental - ' + str(r.id) 
-            result.append((r.id, name))
+
+            result.append((r.id, 'Rental : %s / %s - [  %s ] ' % (str(r.id), r.copy_id.name , r.copy_id.reference)))
+
         return result
+
+#    def name_get(self, cr, uid, ids, context={}):
+#         
+#        if not len(ids):
+#            return []
+#         
+#            res=[]
+#
+#            for emp in self.browse(cr, uid, ids,context=context):
+#                res.append((emp.id, emp.copy_id.name + ', ' + emp.copy_id.reference))
+ 
+#        return res
 
     @api.depends('return_date','actual_return_date')
     def _compute_late_return(self):
@@ -120,7 +141,15 @@ class Rentals(models.Model):
 
     @api.depends('customer_id')
     def _compute_customer_address(self):
-        self.customer_address = self.customer_id.address_get()
+        logging.warning('##course._compute_customer_address:')
+        for r in self:
+            if r.customer_id:
+                logging.warning('##---------- %s' %(r.customer_id))
+                r.customer_address = r.customer_id.address_get(['contact'])['contact']
+
+
+
+#        self.customer_address = self.customer_id.address_get(['contact'])
 #        for r in self:
 #            addr =  r.customer_id.address_get()
 #            self.customer_address = "Test" + addr.street
@@ -129,6 +158,7 @@ class Rentals(models.Model):
 #    def _compute_address_id(self):
 #        addr_id = self.customer_address['contact']
 #        address_id = addr_id
+
 '''
     @api.depends('addr_id')
     def _compute_addr(self) 
