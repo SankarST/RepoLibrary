@@ -79,7 +79,7 @@ class Rentals(models.Model):
         for rec in self:
             rec.state = 'lost'
             rec.copy_id.book_state = 'lost'
-            rec.copy_id.active = False
+            #rec.copy_id.active = False
             rec.add_fee('loss')
 
     @api.model

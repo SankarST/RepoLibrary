@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+       <report
+            id="report_book_rental"
+            model="product.product"
+            string="Rental Report"
+            name="library.report_book_rental_view"
+            file="library.report_book_rental_view"
+            report_type="qweb-pdf" />
+
+        <template id="report_book_rental_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">			
+	            <div class="page">
+			<div class="row">
+
+				<h2>Book : <span t-field="doc.name"/></h2><br/>
+		
+                        </div>
+			
+			<div class="row">
+			    	
+	 		    <p><b>Authors  :  </b> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-field="doc.author_names"/><br/> 
+			    <b>ISBN  :  </b><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-field="doc.isbn"/> <br/>
+		            <b>Publisher  :    </b> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-field="doc.publisher_id.name"/><br/>
+			    <b>Edition Date  :  </b> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-field="doc.edition_date"/></p>                   
+			</div>
+                    	<t t-foreach="doc.copy_ids" t-as="copy">
+                                <div class="page">
+
+				     <div class="row">
+					<p><b>Ref<![CDATA[&nbsp;]]> : </b><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-field="copy.reference" /> </p>
+					<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <p t-field="copy.book_state"/>
+				     </div>
+				     <t t-if="copy.book_state != 'available'">
+	
+	                                     <t t-foreach="copy.rental_ids" t-as="rental">
+		                                   
+						<t t-if="rental.state in 'rented'">
+		                                    <div class="row">
+		                                         <table class="table table-condensed">
+		                                  	     <tr><th>Customer</th><th>Email</th><th>Rented</th><th>Return</th></tr>	
+						             <tr>
+								<td><span t-field="rental.customer_id.name"/></td>
+								<td><span t-field="rental.customer_id.email"/></td>
+		                                                <td><span t-field="rental.rental_date"/></td>
+		                                                <td><span t-field="rental.return_date"/></td>
+		                                            </tr>
+		                                         </table>
+		                                    </div>
+						</t> 
+					    </t>
+				     </t>	
+                                </div>
+                        </t>
+			</div>
+                    </t>
+                    </t>
+                <p style="page-break-after:always;"></p>
+            </t>
+        </template>
+
+
+
+       <report
+            id="report_customer_rental"
+            model="res.partner"
+            string="Customer Rental Report"
+            name="library.report_customer_rental_view"
+            file="library.report_customer_rental_view"
+            report_type="qweb-html" />
+
+        <template id="report_customer_rental_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">			
+	            <div class="page">
+			<div class="row">
+
+				<h2>Customer : <span t-field="doc.name"/></h2><br/>
+		
+                        </div>
+			
+	
+                        <table class="table table-condensed">
+                             <tr><th>Book</th><th>Author</th><th>Rented</th><th>Return</th><th>Status</th></tr>	
+							
+			     <t t-foreach="doc.rental_ids" t-as="rental">
+                                   
+				<!--t t-if="rental.state in 'rented'"-->
+                                    <div class="row">
+                                         <!--table class="table table-condensed">
+                                  	     <tr><th>Book</th><th>Author</th><th>Rented</th><th>Return</th></tr-->	
+				             <tr>
+						<td><span t-field="rental.book_id.name"/></td>
+						<td><span t-field="rental.book_id.author_names"/></td>
+                                                <td><span t-field="rental.rental_date"/></td>
+                                                <td><span t-field="rental.return_date"/></td>
+                                                <td><span t-field="rental.state"/></td>
+                                            </tr>
+                                         <!--/table-->
+                                    </div>
+				<!--/t--> 
+			    </t>
+		        </table>	
+		     
+		    </div>
+		    <p style="page-break-after:always;"></p>
+
+		    <div class="page">
+			   <div class="row">
+			    	
+	 		   	 <p><b> Amount Owed  :  </b> <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> <span t-field="doc.amount_owed"/><br/> </p>
+			   </div>
+			   <div class="row"> 	
+				    <p> <h3> Payment Details </h3> </p>	
+			   </div>
+			   <div>	
+			   <table class="table table-condensed">
+    			    	<tr><th>Date</th><th>Amount</th></tr>
+				<t t-foreach="doc.payment_ids" t-as="payment">
+					<tr>
+						<td><span t-field="payment.date"/></td>
+						<td><span t-field="payment.amount"/></td>
+					</tr>
+				</t>
+			    </table>
+			    </div>
+		    </div>
+                    </t>
+                    </t>
+               
+            </t>
+        </template>
+
+
+
+        <report
+            id="report_rentals"
+            model="library.rental"
+            string="Rental Report"
+            name="library.report_rental_view"
+            file="library.report_rental"
+            report_type="qweb-html" />
+
+        <template id="report_rental_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2 t-field="doc.id"/>
+                            <p>From <span t-field="doc.rental_date"/> to <span t-field="doc.return_date"/></p>
+                            <p>Status: <span t-field="doc.state" /></p>
+                            <h3>Rented By:</h3>
+			    <p><span t-field="doc.customer_id.name"/></p>
+                            
+                            <!--ul>
+                                <t t-foreach="doc.attendee_ids" t-as="rental">
+                                    <li><span t-field="attendee.name"/></li>
+                                </t>
+                            </ul-->
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+       <report
+            id="report_copy_rental"
+            model="library.copy"
+            string="Rental Report"
+            name="library.report_copy_rental_view"
+            file="library.report_copy_rental_view"
+            report_type="qweb-pdf" />
+
+        <template id="report_copy_rental_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-foreach="doc.rental_ids" t-as="rental">
+                            <t t-call="web.external_layout">
+                                <div class="page">
+
+                                    <!--div class="row">
+                                        <div name="rental_info" class="col-xs-5 col-xs-offset-7">
+                                            <address t-esc="attendee" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                                        </div>
+                                    </div-->
+
+                                     <div class="row">
+                                        Dear <span t-field="rental.customer_id.name"/>,<br/>
+                                        You have rented to a book . Check the information below<br/><br/>
+                                    </div>
+
+                                    <div class="row">
+                                         <table class="table table-condensed">
+                                            <tr>
+                                                <td><b>Book:</b></td>
+						<td><span t-field="doc.book_id"/></td>  
+                                                <td><b>From:</b></td>
+                                                <td><span t-field="rental.rental_date"/></td>
+                                                <td><b>To:</b></td>
+                                                <td><span t-field="rental.return_date"/></td>
+                                            </tr>
+                                             <tr>
+                                                 <td><b>State:</b></td>
+                                                 <td><span t-field="rental.state"/></td>
+                                             </tr>
+                                             <!--tr>
+                                                 <td><b>Amount owed:</b></td>
+                                                 <td><span t-field="doc.course_id.name"/></td>
+                                             </tr>
+                                             <tr>
+                                                 <td><b>Duration:</b></td>
+                                                 <td><span t-field="doc.duration"/></td>
+                                             </tr-->
+                                         </table>
+                                    </div>
+
+                                    <div class="row">
+                                        Scan here:
+                                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', rental.customer_id.name, 600, 100)" style="width:300px;height:50px"/>
+                                    </div>
+
+                                </div>
+                            </t>
+                        </t>
+                    </t>
+                <p style="page-break-after:always;"></p>
+            </t>
+        </template>
+
+
+
+    </data>
+
+
+</odoo>
