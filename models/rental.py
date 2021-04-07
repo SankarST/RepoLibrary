@@ -29,9 +29,11 @@ class Rentals(models.Model):
     return_date = fields.Date(required=True)
 
 
-    customer_address = fields.Text(default='Test' ,compute='_compute_customer_address')
-    customer_email = fields.Char(related='customer_id.email')
+    customer_address = fields.Many2one('res.partner' ,compute='_compute_customer_address' ,store=True)
+#    customer_address = fields.Text(compute='_compute_customer_address')
 
+    customer_email = fields.Char(related='customer_id.email')
+    customer_address_display = fields.Text(compute='_compute_customer_address_display')
 
     book_authors = fields.Many2many(related='copy_id.author_ids')
     book_edition_date = fields.Date(related='copy_id.edition_date')
@@ -79,8 +81,22 @@ class Rentals(models.Model):
         for rec in self:
             rec.state = 'lost'
             rec.copy_id.book_state = 'lost'
-            #rec.copy_id.active = False
             rec.add_fee('loss')
+            logging.info ('library.rental - action lost ')
+            #rec.copy_id.active = False
+            book_copies =  rec.book_id.copy_ids
+            copy_count = len(book_copies)
+            lost_count = 0 
+            logging.info ('library.rental - action lost %s ' %(str(copy_count)))
+            for copy in book_copies:
+                if copy.book_state == 'lost':
+                    lost_count += 1
+                    logging.info ('library.rental - action lost %s ' %(str(lost_count)))
+
+            if(copy_count > 1 and (copy_count == lost_count)):
+                logging.info ('library.rental - action lost - setting to false ')
+                rec.copy_id.active = False
+
 
     @api.model
     def _cron_check_date(self):
@@ -98,18 +114,6 @@ class Rentals(models.Model):
             result.append((r.id, 'Rental : %s / %s - [  %s ] ' % (str(r.id), r.copy_id.name , r.copy_id.reference)))
 
         return result
-
-#    def name_get(self, cr, uid, ids, context={}):
-#         
-#        if not len(ids):
-#            return []
-#         
-#            res=[]
-#
-#            for emp in self.browse(cr, uid, ids,context=context):
-#                res.append((emp.id, emp.copy_id.name + ', ' + emp.copy_id.reference))
- 
-#        return res
 
     @api.depends('return_date','actual_return_date')
     def _compute_late_return(self):
@@ -138,26 +142,24 @@ class Rentals(models.Model):
                 result = r.mapped('book_authors.name')
                 r.book_author_names = ", ".join(result)
 
-
     @api.depends('customer_id')
     def _compute_customer_address(self):
-        logging.warning('##course._compute_customer_address:')
+        logging.info('####### %s 1 ')
+
         for r in self:
+            logging.info('####### %s 2 ')
+
+
             if r.customer_id:
-                logging.warning('##---------- %s' %(r.customer_id))
-                r.customer_address = r.customer_id.address_get(['contact'])['contact']
+                logging.info('####### %s' %(r.customer_id.address_get() ))
+                r.customer_address = r.customer_id.address_get(['contact'])['contact'] 
 
 
+    @api.depends('customer_id')
+    def _compute_customer_address_display(self):
+        self.customer_address_display = self.customer_id._display_address() #This ln of code is enough
 
-#        self.customer_address = self.customer_id.address_get(['contact'])
-#        for r in self:
-#            addr =  r.customer_id.address_get()
-#            self.customer_address = "Test" + addr.street
 
-#    @api.depends('customer_address')
-#    def _compute_address_id(self):
-#        addr_id = self.customer_address['contact']
-#        address_id = addr_id
 
 '''
     @api.depends('addr_id')
@@ -166,22 +168,7 @@ class Rentals(models.Model):
             addr = [rec.addr_id.street, rec.addr_id.street2,
                 rec.addr_id.city,
                    rec.addr_id.zip]
-            self.addresscustomer_address = ', '.join(filter(bool, addr))
+            self.customer_address = ', '.join(filter(bool, addr))
 
 '''
-
-
-#get('contact', False)
-#        address_val  = self.customer_id.address_get()
-#        self.customer_address = address_val.street2
-#        address_val  = self.customer_id.address_get(self._cr, self.uid, [self.customer_id.id], ['contact'])['contact']
-#        self.customer_address = address_val
-
-#      	for rec in self:
-#            addr = [rec.customer_id.street, rec.customer_id.street2,
-#                rec.customer_id.city,
-#                   rec.customer_id.zip]
-#            self.customer_address = ', '.join(filter(bool, addr))
-
-
 

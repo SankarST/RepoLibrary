@@ -45,6 +45,7 @@
                         <group>
                             <field name="id" string="Rental Ref #"/>
                         </group>
+                    
                         <group>
 				<!-- widget=selection just displays selectable list. nothing else allowed-->
 <!--                            <field name="customer_id" domain="[('is_author', '=', False)]" widget="selection"/ -->
@@ -52,8 +53,9 @@
 				options="{'no_open': True, 'no_create': True}"/>--> <!-- domain set in model-->
 				<!--<options="{'no_quick_create': True, 'no_create_edit' : True}"/>-->
                             <field name="customer_id" context="{'default_customer': True}"/>
-  			    <field name="customer_email"/>
-                            <field name="customer_address"/>
+  			    <field name="customer_email" string="Email"/>
+                            <field name="customer_address" string="Contact"/>
+                            <field name="customer_address_display" string="Address"/>
                         </group>
                     
                     </group>
