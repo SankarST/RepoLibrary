@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="menu_rent_form12" model="website.menu">
+        <field name="name">Rent a Book</field>
+        <field name="url">/rent_webform</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">55</field>
+    </record>
+
+    <template id="create_rent" name="Create Rent">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <div class="container">
+                        <form role="form" action="/create/webrent" method="POST">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <!--div class="form-group">
+                                <label for="patient_name" class="control-label">Name</label>
+                                <input type="text" name="patient_name" t-att-value="patient_name" id="patient_name"
+                                       class="form-control" placeholder="e.g. John Doe" required="required"/>
+                            </div-->
+                            <!--div class="form-group">
+                                <label for="email" class="control-label">Email</label>
+                                <input type="email" name="email_id" t-att-value="email_id" id="email_id"
+                                       class="form-control" required="required"/>
+                            </div-->
+                            <div class="form-group">
+								
+								<!--t t-esc="login_user_rec.login"/> <br/>
+								<t t-esc="login_partner_rec.name"/> <br/-->
+								
+                                <label for="copy_id" class="control-label">Book Name</label>
+								<select name="copy_id" class="form-control link-style" style="max-width: 1000px;">
+                                    <t t-foreach='bookcopy_rec' t-as="bookcopy">
+	                                   <t t-if="bookcopy.book_state in 'available'">
+    	                                    <option t-esc='bookcopy.name' t-att-value='bookcopy.id'/>
+											<!--t t-esc='bookcopy.name'/><t t-esc='bookcopy.book_state'/-->
+        	                            </t>
+            						</t>
+			                    </select>
+								<table>
+								<tr><td>
+									<div>
+											<!--input type="text" name="rental_date" data-date-format="YYYY-MM-DD"/-->
+											    <label for="rental_date" ckass="control-label"> Rental Date </label>
+						                        <input id="rental_date" type="date" name="rental_date" class="form-control o_website_form_input o_website_form_date oe_inline" style="max-width: 300px;"/>
+  									</div>
+								</td></tr>
+								<tr><td>
+									<div>			
+											 	<label for="return_date" ckass="control-label"> Return Date </label>
+						                      
+											    <!--input type="date" min="1900-01-01" name="return_date" t-att-value="date_formatted" class="form-control activity_date_deadline datetimepicker-input oe_inline" data-date-format="YYYY-MM-DD" placeholder="YYYY-MM-DD" style="max-width: 200px:"/>
+												-->
+                                                   
+												 <input id="return_date" type="date" name="return_date" class="form-control o_website_form_input o_website_form_date oe_inline" style="max-width: 200px;"/>
+		                                            <!--span t-field="lead.create_date" t-options='{"widget": "date"}' /-->										
+											
+									</div>
+								</td></tr>
+								</table>
+                            </div>
+                            <div class="clearfix oe_login_buttons">
+                                <button type="submit" class="btn btn-primary pull-left">Create Rent</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="rent_thanks" model="website.page">
+        <field name="name">Thanks</field>
+        <field name="type">qweb</field>
+        <field name="url">/rent-thank-you</field>
+        <field name="website_published">True</field>
+        <field name="key">library.rent_thanks</field>
+        <field name="arch" type="xml">
+            <t name="Thanks" t-name="library.rent_thanks">
+                <t t-call="website.layout">
+                  <div id="wrap">
+                    <div class="container">
+                        <h1>Thanks!</h1>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="alert alert-success" role="status">
+                                    The Rental Request has been submitted. Ref # <t t-esc="rental_rec.id"/> <br/>
+                                </div>
+                                <p>
+                                    Thank you for visiting.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+</odoo>

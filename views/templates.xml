@@ -1,0 +1,81 @@
+<odoo>
+
+        <template id="index">
+
+            <t t-call="website.layout">
+                <t t-set="title">Library</t>
+                <div class="oe_structure">
+                    <div class="container">
+                        <t t-foreach="bookcopy" t-as="copy">
+                            <p><t t-esc="copy.id"/> <t t-esc="copy.name"/></p>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="books">
+
+            <t t-call="website.layout">
+                <t t-set="title">Library Books</t>
+                <div class="oe_structure">
+                    <div class="container">
+						<h2 align="center">Books</h2>
+						<table class="table table-bordered">
+                    	    <thead>
+                        	   	<!--tr>
+								    <th colspan="2" align="center">
+ 										Books List
+                                    </th>
+								</tr-->
+								<tr>
+                            	    <th>
+										Id
+				   					 </th>
+				   					 <th>
+                                		Name
+                                    </th>
+									<th>
+										Author(s)
+									</th>
+								</tr>
+                            </thead>
+                    	    <tbody>
+                        		<t t-foreach="books" t-as="book">
+                            		<t t-if="book.is_book" >
+
+										<tr>
+	                               			<td>
+	                                             <t t-esc="book.id"/>
+	                               			</td>
+											<td>
+											    <t t-esc="book.name"/>	
+											</td>
+											<td>
+												<t t-foreach="book.author_ids" t-as="author">
+													<t t-esc="author.name"/>
+												</t>
+											</td>
+										</tr>
+	                                </t>
+								</t>
+                            </tbody>
+                       </table>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+
+
+	<!--template id="index">
+	    <title>Library</title>
+	    <t t-foreach="bookcopy" t-as="bcopy">
+	        <p><t t-esc="bcopy.id"/> <t t-esc="bcopy.name"/></p>
+	    </t>
+	</template-->
+
+
+</odoo>

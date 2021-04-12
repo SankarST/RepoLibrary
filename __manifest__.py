@@ -21,7 +21,7 @@
     'version':     '0.6',
 
     # any module necessary for this one to work correctly
-    'depends':     ['base','product'],
+    'depends':     ['base','product','website'],
 
     # always loaded
     'data':        [
@@ -33,11 +33,13 @@
         "views/price_views.xml",
         "views/payment_views.xml",
         "views/menu_views.xml",
+        "views/templates.xml",  
         "wizard/select_book_views.xml",
         "report/reports.xml",
         "data/cron.xml",
         "data/mail.xml",
         "data/library_data.xml",
+	'views/website_form.xml',
     ],
     # only loaded in demonstration mode
     'demo':        [],
