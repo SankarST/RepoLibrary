@@ -8,6 +8,16 @@
         <field name="sequence">55</field>
     </record>
 
+
+    <record id="menu_library_books" model="website.menu">
+        <field name="name">Books</field>
+        <field name="url">/library/books</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">45</field>
+    </record>
+    
+
+
     <template id="create_rent" name="Create Rent">
         <t t-call="website.layout">
             <div id="wrap">
@@ -31,10 +41,12 @@
 								<t t-esc="login_partner_rec.name"/> <br/-->
 								
                                 <label for="copy_id" class="control-label">Book Name</label>
-								<select name="copy_id" class="form-control link-style" style="max-width: 1000px;">
+								<select name="copy_id" class="form-control link-style" style="max-width: 500px;">
                                     <t t-foreach='bookcopy_rec' t-as="bookcopy">
 	                                   <t t-if="bookcopy.book_state in 'available'">
-    	                                    <option t-esc='bookcopy.name' t-att-value='bookcopy.id'/>
+
+    	                    			  <t t-set="finaltext" t-value="bookcopy.name + ' - ' + bookcopy.author_names + ' - '  +  bookcopy.reference"/>  
+							              <option t-esc='finaltext' t-att-value='bookcopy.id'/>
 											<!--t t-esc='bookcopy.name'/><t t-esc='bookcopy.book_state'/-->
         	                            </t>
             						</t>

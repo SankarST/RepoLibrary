@@ -69,9 +69,10 @@ class Library(http.Controller):
 
     @http.route('/library/books/', auth='public' , website=True)
     def books(self, **kw):
-        Books = http.request.env['product.product']
+        Books = http.request.env['product.product'].sudo().search([('is_book', '=', True)])
+        logging.info("Books ---------------  %s ", Books)
         return http.request.render('library.books', {
-            'books': Books.search([])
+            'books': Books
         })
 
    
