@@ -13,7 +13,7 @@
                 <field name="copy_count" string="Copy #"/>
                 <field name="publisher_id"/>
                 <field name="isbn"/>
-                <field name="is_book"/>
+                <field name="is_book" invisible="1"/>
             </tree>
         </field>
     </record>

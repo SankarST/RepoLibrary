@@ -31,8 +31,8 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
           	<field name="amount_owed" position="replace"/>
-                <!--field name="is_author"/> 
-                <field name="is_publisher"/-->
+                <field name="is_author" position="replace"/> 
+                <field name="is_publisher" position="replace"/>
             
         </field>
     </record>
