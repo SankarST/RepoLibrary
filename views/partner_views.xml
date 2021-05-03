@@ -63,9 +63,9 @@
                         </div>
                     </group>
 		    <group>
-			<field name="is_author"/> 
+			            <field name="is_author" attrs="{'invisible':[('is_publisher', '=', True)]}"/> 
                         <field name="is_publisher"/>
-                        <field name="customer"/>     
+                        <field name="customer" attrs="{'invisible':[('is_publisher', '=', True)]}"/>     
                     </group>
 		    <field name="qty_lost_book" invisible="1"/>
                     <notebook>
