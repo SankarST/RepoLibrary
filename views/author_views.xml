@@ -47,7 +47,30 @@
         </field>
     </record>
 
-    <record id="author_action" model="ir.actions.act_window">
+
+    <record model="ir.actions.act_window" id="author_action">
+        <field name="name">Authors Info </field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_author','=',True)]</field>
+        <field name="context">{'default_is_author': True}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {
+                'view_mode': 'tree',
+                'view_id': ref('library.author_view_tree'),
+                }),
+            (0, 0, {
+                'view_mode': 'form',
+                'view_id': ref('library.author_view_form'),
+                }),
+            ]"/>
+    </record>
+
+    <!-- To try the views combined as above, commented the below code.
+        -->
+
+    <!--record id="author_action" model="ir.actions.act_window">
         <field name="name">Authors</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
@@ -67,5 +90,5 @@
         <field name="sequence" eval="20"/>
         <field name="view_id" ref="library.author_view_form"/>
         <field name="act_window_id" ref="library.author_action"/>
-    </record>
+    </record-->
 </odoo>
